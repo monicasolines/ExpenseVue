@@ -92,7 +92,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "chart.js": "^4.4.6",
+    "chart.js": "^4.4.7",
     "firebase": "^11.0.1",
     "prop-types": "^15.6.1",
     "react": "^16.8.4",
