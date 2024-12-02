@@ -2,6 +2,7 @@
 **Your financial management companion!**  
 
 ExpenseVue is a simple and intuitive platform that allows users to track their income and expenses, create personalized budgets, and monitor their financial health—all in one place.
+![Homepage of ExpenseVue](src/front/img/home.png "Screenshot of the homepage")
 
 ---
 
