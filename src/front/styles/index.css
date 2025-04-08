@@ -21,7 +21,9 @@
     color: white;
 }
 
-
+.footer {
+    background: #A0AEC0;
+}
 /* Este cambia el color de los pills del login */
 .nav-pills .nav-link.active,
 .show>.nav-pills .nav-link{
@@ -75,11 +77,11 @@
 }
 
 .connection-btn:hover {
-    color: #ffc107;
+    color: #A0AEC0;
 }
 
 .transaction-btn {
-    background-color: #ffc107;
+    background-color: #A0AEC0;
 }
 
 .transaction-btn:hover {

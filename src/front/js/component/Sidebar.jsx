@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import "../../styles/sidebar.css";
-import logoExpenseVue from "../../img/ExpenseVue-Logo.png";
-import userImg from "../../img/user-img.png";
+import logoExpenseVue from "../../img/logoEV2.png";
+import userImg from "../../img/perfil.png";
 import { doSignOut } from "../../../firebase/auth"; // Import sign-out function
 
 export const Sidebar = () => {
@@ -38,7 +38,7 @@ export const Sidebar = () => {
             {/* Sidebar para pantallas grandes */}
             <div className="sidebar-container d-none d-lg-block">
                 <Link to="/" className="navbar-brand">
-                    <img className="mb-4 mt-2 mx-5" height="80" src={logoExpenseVue} alt="Logo ExpenseVue" />
+                    <img className=" mt-2 mx-5" height="80" src={logoExpenseVue} alt="Logo ExpenseVue" />
                 </Link>
                 <hr />
                 <ul className="nav nav-pills flex-column mb-auto list-unstyled sidebar-content">

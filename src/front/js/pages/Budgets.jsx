@@ -94,7 +94,7 @@ export const Budgets = () => {
                 <div className="row mb-4">
                     <div className="col-12 col-sm-4 mb-3">
                         <div className="card text-center p-4">
-                            <i className="fas fa-wallet fa-2x text-warning"></i>
+                            <i className="fas fa-wallet fa-2x"></i>
                             <h5>Total Amount in Budgets</h5>
                             <p className="text-dark">
                                 €{filteredBudgets.reduce((acc, budget) => acc + (budget.budget_amount || 0), 0).toFixed(2)}
@@ -103,14 +103,14 @@ export const Budgets = () => {
                     </div>
                     <div className="col-12 col-sm-4 mb-3">
                         <div className="card text-center p-4">
-                            <i className="fa-solid fa-layer-group fa-2x text-warning"></i>
+                            <i className="fa-solid fa-layer-group fa-2x"></i>
                             <h5>Total Categories</h5>
                             <p className="text-dark">{store.categories?.length || 0}</p>
                         </div>
                     </div>
                     <div className="col-12 col-sm-4 mb-3">
                         <div className="card text-center p-4">
-                            <i className="fa-solid fa-euro-sign fa-2x text-warning"></i>
+                            <i className="fa-solid fa-euro-sign fa-2x"></i>
                             <h5>Total Expenses</h5>
                             <p className="text-dark">
                                 €{filteredBudgets.reduce((acc, budget) => acc + (budget.total_expense || 0), 0).toFixed(2)}

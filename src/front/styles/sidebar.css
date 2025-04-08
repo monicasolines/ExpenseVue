@@ -4,7 +4,7 @@
     left: 0; 
     height: 100vh;
     width: 250px; 
-    background-color: #ffc107;
+    background-color: #A0AEC0;
     overflow-y: auto;
     padding: 1rem; 
     color: white; 
@@ -71,16 +71,16 @@
 
 @media (max-width: 768px) {
     .offcanvas {
-        background-color: #ffc107; 
+        background-color: #A0AEC0; 
     }
     .offcanvas-header {
-        background-color: #ffc107 !important;
+        background-color: #A0AEC0 !important;
     }
     .offcanvas-body {
-        background-color: #ffc107; 
+        background-color: #A0AEC0; 
     }
 }
 
 .bg-mobile {
-    background-color: #ffc107 !important;
+    background-color: #A0AEC0 !important;
 }

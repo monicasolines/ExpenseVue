@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
-import userImg from "../../img/user-img.png";
+import userImg from "../../img/perfil.png";
 import { Spinner } from "../component/Spinner.jsx";
 
 export const Profile = () => {
