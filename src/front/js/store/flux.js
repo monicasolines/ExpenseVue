@@ -299,6 +299,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						callback: `${getStore().frontHost}/connections`
 					})
 				};
+				console.log("options:", options)
 				const response = await fetch(uri, options);
 				if (!response.ok) {
 					console.log('Error: ', response.status, response.statusText);

@@ -17,6 +17,7 @@ import cloudinary.uploader
 import secrets
 import smtplib
 from email.mime.text import MIMEText
+from flask_jwt_extended import get_jwt
 
 
 api = Blueprint('api', __name__)
@@ -26,6 +27,15 @@ load_dotenv()
 
 yapily_uuid = os.getenv('YAPILY_UUID')
 yapily_secret = os.getenv('YAPILY_SECRET')
+
+
+
+@api.route("/debug", methods=["GET"])
+@jwt_required()
+def debug():
+    user = get_jwt_identity()
+    print("User identity:", user)
+    return jsonify({"user": user}), 200
 
 
 @api.route('/hello', methods=['GET'])
@@ -61,11 +71,13 @@ def login():
     if not user:
         response_body['message'] = "The email or password is incorrect"
         return response_body, 401
-    access_token = create_access_token(identity={'email': user.email, 'user_id': user.id})
+    claims = {'email': user.email, 'user_id': user.id}
+    access_token = create_access_token(identity= email, additional_claims= claims)
     response_body['message'] = f'Welcome, {email}'
     response_body['access_token'] = access_token
     response_body['results'] = user.serialize()
     return response_body, 200
+
 
 
 @api.route('/institutions', methods=['GET'])
@@ -103,7 +115,8 @@ def institutions():
 @jwt_required()
 def connections():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     rows = db.session.execute(db.select(Connections).where(Connections.user_id == current_user['user_id'])).scalars()
     result = [row.serialize() for row in rows]
     response_body['message'] = "These are your connections (GET)"
@@ -115,7 +128,8 @@ def connections():
 @jwt_required()
 def connection(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Connections).where(Connections.user_id == current_user['user_id'], Connections.id == id)).scalar()
     db.session.execute(db.delete(Transactions).where(Transactions.source_id.in_(db.session.execute(db.select(Sources.id).where(Sources.connection_id == id)).scalars())))
     db.session.execute(db.delete(Sources).where(Sources.connection_id == id))
@@ -130,7 +144,8 @@ def connection(id):
 @jwt_required()
 def create_yapily_user():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     email_start = user.email.split('@')[0]
     url = "https://api.yapily.com/users"
@@ -140,6 +155,7 @@ def create_yapily_user():
     headers = {
         "Content-Type": "application/json;charset=UTF-8"
     }
+    print(yapily_uuid, yapily_secret);
     response = requests.post(url, json=payload, headers=headers, auth=(yapily_uuid, yapily_secret))
     if response.status_code != 201:
         response_body['message'] = "Something went wrong"
@@ -193,9 +209,12 @@ def remove_yapily_user():
 @jwt_required()
 def account_auth_requests():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     front_data = request.get_json()
+    print("front", front_data);
+    print("")
     application_user_id = front_data.get('applicationUserId')
     institution_id = front_data.get('institutionId')
     callback = front_data.get('callback')
@@ -211,7 +230,10 @@ def account_auth_requests():
     query = {
         "raw": "true"
     }
+    print("uuid, secret", yapily_uuid, yapily_secret)
     response = requests.post(url, json=payload, headers=headers, params=query, auth=(yapily_uuid, yapily_secret))
+    print("response code", response.status_code)
+    print("response text", response.text)
     if response.status_code != 201:
         response_body['message'] = "Something went wrong"
         response_body['results'] = response.json()
@@ -230,7 +252,8 @@ def account_auth_requests():
 @jwt_required()
 def consent_token():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     front_data = request.get_json()
     consent_token = front_data.get('consentToken')
@@ -248,7 +271,8 @@ def consent_token():
 @jwt_required()
 def accounts():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     consent_token = request.headers.get('consent')
     connection = Connections.query.filter_by(consent_token=consent_token).first()
@@ -288,7 +312,8 @@ def accounts():
 @jwt_required()
 def bank_transactions():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     consent_token = request.headers.get('consent')
     source_id = request.headers.get('sourceId')
@@ -332,7 +357,8 @@ def bank_transactions():
 @jwt_required()
 def sources():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     if request.method == 'GET':
         rows = db.session.execute(db.select(Sources).where(Sources.user_id == current_user['user_id'])).scalars()
         result = [row.serialize() for row in rows]
@@ -356,7 +382,8 @@ def sources():
 @jwt_required()
 def source(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Sources).where(Sources.user_id == current_user['user_id'], Sources.id == id)).scalar()
     if not row:
         response_body['message'] = "This source does not exist"
@@ -387,7 +414,8 @@ def source(id):
 @jwt_required()
 def balances():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Balances).where(Balances.user_id == current_user['user_id'])).scalar()
     if not row:
         response_body['message'] = "You do not have a balance"
@@ -402,7 +430,8 @@ def balances():
 @jwt_required()
 def categories():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     if request.method == 'GET':
         rows = db.session.execute(db.select(Categories).where(Categories.user_id == current_user['user_id'])).scalars()
         result = [row.serialize() for row in rows]
@@ -425,7 +454,8 @@ def categories():
 @jwt_required()
 def category(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Categories).where(Categories.user_id == current_user['user_id'], Categories.id == id)).scalar()
     if not row:
         response_body['message'] = f'The category {id} does not exist'
@@ -456,7 +486,8 @@ def category(id):
 @jwt_required()
 def transactions():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     rows = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user['user_id'])).scalars().all()
     for row in rows:
         print(f"{row.source_to.user_id} - current_user {current_user['user_id']}")
@@ -489,7 +520,8 @@ def transactions():
 @jwt_required()
 def transaction(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user['user_id'], Transactions.id == id)).scalar()
     if not row:
         response_body['message'] = "This Transaction does not exist"
@@ -524,7 +556,8 @@ def transaction(id):
 @jwt_required()
 def fixed_expenses():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     expenses = db.session.execute(db.select(FixedExpenses).join(Categories).where(Categories.user_id == current_user['user_id'])).scalars()
     if request.method == 'GET':
         result = [row.serialize() for row in expenses]
@@ -552,7 +585,8 @@ def fixed_expenses():
 @jwt_required()
 def fixed_expense_by_id(id):
     expense = FixedExpenses.query.get_or_404(id)
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     category = db.session.execute(db.select(Categories).where(Categories.id == expense.category_id, Categories.user_id == current_user['user_id'])).scalar()
     if not category:
         return jsonify({'message': 'Unauthorized access to this expense'}), 403
@@ -579,7 +613,8 @@ def fixed_expense_by_id(id):
 @jwt_required()
 def budgets():
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     if request.method == 'GET':
         rows = db.session.execute(db.select(Budgets).distinct().where(Categories.user_id == current_user['user_id'])).scalars()
         result = [row.serialize() for row in rows]
@@ -603,7 +638,8 @@ def budgets():
 @jwt_required()
 def budget(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     row = db.session.execute(db.select(Budgets).where(Categories.user_id == current_user['user_id'], Budgets.id == id)).scalar()
     if not row:
         response_body['message'] = "This budget does not exist"
@@ -632,7 +668,7 @@ def budget(id):
 
 
 @api.route('/users', methods=['GET', 'POST'])
-@jwt_required()
+# @jwt_required()
 def users():
     response_body = {}
     if request.method == 'GET':
@@ -659,7 +695,8 @@ def users():
 @jwt_required()
 def user(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    # current_user = get_jwt_identity()
+    current_user = get_jwt()  # Los datos adicionales
     print("current_user:", current_user) 
     row = db.session.execute(db.select(Users).where(Users.id == id)).scalar()
     if not row:
