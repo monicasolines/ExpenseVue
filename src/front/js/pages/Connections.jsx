@@ -37,7 +37,12 @@ export const Connections = () => {
 		const consentToken = queryParams.get('consent');
 		const institutionId = queryParams.get('institution');
 		if (consentToken && institutionId) {
-			setConfirmingBank(true);
+			// ✅ llama directamente a la función para guardar el token
+			actions.getConsentToken(consentToken, institutionId).then(() => {
+				navigate('/connections'); // limpia la URL
+				actions.getConnections(); // actualiza la vista
+				actions.getSources();
+			});
 		}
 	}, []);
 
@@ -187,11 +192,11 @@ export const Connections = () => {
 												<form onSubmit={addSource}>
 													<div className="form-outline mb-4">
 														<label className="form-label" htmlFor="registerName">Name<span className="required">*</span></label>
-														<input type="text" id="name" className="form-control" value={name} onChange={(event) => setName(event.target.value)} required/>
+														<input type="text" id="name" className="form-control" value={name} onChange={(event) => setName(event.target.value)} required />
 													</div>
 													<div className="form-outline mb-4">
 														<label className="form-label" htmlFor="registerType">Type of the Source<span className="required">*</span></label>
-														<select className="form-select" aria-label="Default select example" value={type} onChange={(event) => setType(event.target.value)}required>
+														<select className="form-select" aria-label="Default select example" value={type} onChange={(event) => setType(event.target.value)} required>
 															<option value="" disabled>Choose the type of the source</option>
 															<option value="bank_account">Bank Account</option>
 															<option value="credit_card">Credit Card</option>
@@ -202,7 +207,7 @@ export const Connections = () => {
 													</div>
 													<div className="form-outline mb-4">
 														<label className="form-label" htmlFor="registerAmount">Amount<span className="required">*</span></label>
-														<input type="text" id="amount" className="form-control" value={amount} onChange={(event) => setAmount(event.target.value)} required/>
+														<input type="text" id="amount" className="form-control" value={amount} onChange={(event) => setAmount(event.target.value)} required />
 													</div>
 													<div className="modal-footer">
 														<button type="submit" className="btn" style={{ backgroundColor: '#2D3748', color: '#E2E8F0' }}>Add Source</button>
@@ -265,8 +270,8 @@ export const Connections = () => {
 								}
 							</div>
 							{Array.isArray(sources) && sources.some((manualSource) => !manualSource.yapily_id) ?
-							<div className="text-center mt-5">
-								<h5>Other sources</h5>
+								<div className="text-center mt-5">
+									<h5>Other sources</h5>
 									<div className="accordion" id="accordionExample2">
 										<div className="accordion-item">
 											<h2 className="accordion-header">
@@ -306,10 +311,10 @@ export const Connections = () => {
 											</div>
 										</div>
 									</div>
-							</div>
-							:
-							''
-						}
+								</div>
+								:
+								''
+							}
 						</>
 					)}
 				</div>
