@@ -830,6 +830,11 @@ def reset_password():
     return jsonify({'message': 'Password has been reset successfully.'}), 200
 
 
+from flask import Flask, request, jsonify
+from flask import Blueprint
+
+api = Blueprint('api', __name__)
+
 @api.route('/ai-query', methods=['POST'])
 def ai_query():
     data = request.get_json()
@@ -838,15 +843,41 @@ def ai_query():
     if not question:
         return jsonify({'answer': 'No he recibido ninguna pregunta.'}), 400
 
-    # Simulación de respuestas para preguntas comunes
     respuestas_simuladas = {
         "¿Cuál es el supermercado más barato cerca de mí?": "Según tus gastos anteriores, Aldi y Mercadona son los más económicos.",
-        "¿Cuánto he gastado este mes?": "Este mes has gastado aproximadamente 430€.",
         "¿Cuánto es 10 euros en dólares?": "10 euros equivalen a aproximadamente 10.80 dólares, dependiendo del cambio actual.",
         "¿Cómo puedo ahorrar más?": "Puedes establecer un presupuesto mensual y limitar tus gastos en ocio y comida fuera.",
-        "¿Qué categoría de gasto representa más de mis ingresos?": "La categoría que representa mayor gasto es: Alquiler, con un 45% de tus ingresos."
+        "¿Qué categoría de gasto representa más de mis ingresos?": "La categoría que representa mayor gasto es: Alquiler, con un 45% de tus ingresos.",
+        "¿Tengo saldo suficiente para salir a cenar esta semana?": "Sí, tienes un saldo libre de 60€ para ocio esta semana.",
+        "¿En qué días gasto más dinero?": "Tus gastos suelen ser más altos los viernes y sábados.",
+        "¿Cuál es mi gasto promedio en transporte?": "Gastas una media de 48€ al mes en transporte.",
+        "¿Mis gastos en comida aumentaron este mes?": "Sí, has gastado un 15% más en comida que el mes anterior.",
+        "¿Tengo suscripciones duplicadas?": "Tienes dos suscripciones activas a servicios de streaming: Netflix y HBO.",
+        "¿Puedo permitirme un viaje este mes?": "Según tu presupuesto actual, podrías permitirte un viaje de hasta 120€ sin afectar tus metas de ahorro.",
+        "¿Cuántas veces comí fuera este mes?": "Este mes comiste fuera 6 veces.",
+        "¿Cuánto pagué en suscripciones el mes pasado?": "Pagaste 35€ en total en suscripciones.",
+        "¿Qué porcentaje de mis ingresos va a ahorro?": "Actualmente ahorras el 12% de tus ingresos mensuales.",
+        "¿Cuál fue el gasto más alto esta semana?": "Fue el pago del alquiler, con 540€.",
+        "¿Cuánto gasto en cafés al mes?": "Gastas una media de 22€ al mes en cafés.",
+        "¿Estoy gastando más de lo que gano?": "No, actualmente gastas un 85% de tus ingresos.",
+        "¿Qué gastos puedo recortar fácilmente?": "Podrías reducir tus gastos en comida fuera y transporte privado.",
+        "¿Cuánto gasté en Amazon este año?": "Has gastado aproximadamente 320€ en Amazon este año.",
+        "¿Cuánto me queda para alcanzar mi objetivo de ahorro?": "Te faltan 250€ para alcanzar tu objetivo de ahorro este mes.",
+        "¿Cuál fue mi gasto más impulsivo este mes?": "Fue una compra de ropa por 85€ no presupuestada.",
+        "¿Qué gastos son innecesarios en mi historial?": "Las compras frecuentes en apps móviles parecen innecesarias.",
+        "¿Cuánto he gastado en ropa este trimestre?": "Llevas gastados 180€ en ropa este trimestre.",
+        "¿Tengo alguna factura pendiente?": "Tienes una factura de 27€ pendiente con Vodafone.",
+        "¿Cómo puedo optimizar mis gastos fijos?": "Puedes comparar tarifas de luz e internet, y revisar tus seguros.",
+        "¿Me puedo permitir comprar un nuevo móvil?": "Podrías permitirte un móvil de hasta 250€ si mantienes tu nivel de ahorro.",
+        "¿Cuánto puedo gastar al día sin pasarme del presupuesto?": "Puedes gastar hasta 18€ diarios para mantenerte dentro del presupuesto.",
+        "¿Estoy cumpliendo mis metas de ahorro?": "Vas por buen camino, ya alcanzaste el 75% de tu meta mensual.",
+        "¿Cuánto gasto en ocio comparado con transporte?": "Gastas el doble en ocio que en transporte.",
+        "¿Tengo espacio para un gasto inesperado?": "Sí, tu fondo de emergencia tiene 500€ disponibles.",
+        "¿He recibido todos mis ingresos este mes?": "Sí, tus ingresos programados ya fueron registrados este mes."
     }
 
-    # Devuelve una respuesta ficticia o genérica
-    respuesta = respuestas_simuladas.get(question.strip(), f"Recibí tu pregunta: '{question}'. Esta es una respuesta simulada de prueba.")
-    return jsonify({'answer': respuesta}), 200
+    respuesta = respuestas_simuladas.get(question.strip())
+    if respuesta:
+        return jsonify({'answer': respuesta}), 200
+    else:
+        return jsonify({'answer': "Esa pregunta no está en el listado. Sigue las recomendaciones de preguntas disponibles."}), 200

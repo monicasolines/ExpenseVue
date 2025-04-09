@@ -10,10 +10,35 @@ export const AsistenteFinanciero = () => {
 
 	const recommendedQuestions = [
 		"¿Cuál es el supermercado más barato cerca de mí?",
-		"¿Cuánto he gastado este mes?",
 		"¿Cuánto es 10 euros en dólares?",
 		"¿Cómo puedo ahorrar más?",
-		"¿Qué categoría de gasto representa más de mis ingresos?"
+		"¿Qué categoría de gasto representa más de mis ingresos?",
+		"¿Tengo saldo suficiente para salir a cenar esta semana?",
+		"¿En qué días gasto más dinero?",
+		"¿Cuál es mi gasto promedio en transporte?",
+		"¿Mis gastos en comida aumentaron este mes?",
+		"¿Tengo suscripciones duplicadas?",
+		"¿Puedo permitirme un viaje este mes?",
+		"¿Cuántas veces comí fuera este mes?",
+		"¿Cuánto pagué en suscripciones el mes pasado?",
+		"¿Qué porcentaje de mis ingresos va a ahorro?",
+		"¿Cuál fue el gasto más alto esta semana?",
+		"¿Cuánto gasto en cafés al mes?",
+		"¿Estoy gastando más de lo que gano?",
+		"¿Qué gastos puedo recortar fácilmente?",
+		"¿Cuánto gasté en Amazon este año?",
+		"¿Cuánto me queda para alcanzar mi objetivo de ahorro?",
+		"¿Cuál fue mi gasto más impulsivo este mes?",
+		"¿Qué gastos son innecesarios en mi historial?",
+		"¿Cuánto he gastado en ropa este trimestre?",
+		"¿Tengo alguna factura pendiente?",
+		"¿Cómo puedo optimizar mis gastos fijos?",
+		"¿Me puedo permitir comprar un nuevo móvil?",
+		"¿Cuánto puedo gastar al día sin pasarme del presupuesto?",
+		"¿Estoy cumpliendo mis metas de ahorro?",
+		"¿Cuánto gasto en ocio comparado con transporte?",
+		"¿Tengo espacio para un gasto inesperado?",
+		"¿He recibido todos mis ingresos este mes?"
 	];
 
 	const handleSubmit = async (event) => {
@@ -52,7 +77,7 @@ export const AsistenteFinanciero = () => {
 			<div className="ai-chat card p-3">
 				<div className="recommended-questions mb-3">
 					<p><strong>Preguntas recomendadas:</strong></p>
-					<div className="d-flex flex-wrap gap-2">
+					<div className="d-flex flex-wrap gap-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
 						{recommendedQuestions.map((q, i) => (
 							<button key={i} className="btn btn-outline-secondary btn-sm" onClick={() => setInput(q)}>
 								{q}
