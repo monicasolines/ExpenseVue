@@ -18,7 +18,9 @@ import secrets
 import smtplib
 from email.mime.text import MIMEText
 from flask_jwt_extended import get_jwt
+import openai 
 
+openai.api_key = os.getenv("OPENAI_API_KEY")  
 
 api = Blueprint('api', __name__)
 CORS(api)  # Allow CORS requests to this API
@@ -27,7 +29,6 @@ load_dotenv()
 
 yapily_uuid = os.getenv('YAPILY_UUID')
 yapily_secret = os.getenv('YAPILY_SECRET')
-
 
 
 @api.route("/debug", methods=["GET"])
@@ -827,3 +828,25 @@ def reset_password():
     db.session.commit()
 
     return jsonify({'message': 'Password has been reset successfully.'}), 200
+
+
+@api.route('/ai-query', methods=['POST'])
+def ai_query():
+    data = request.get_json()
+    question = data.get('question')
+
+    if not question:
+        return jsonify({'answer': 'No he recibido ninguna pregunta.'}), 400
+
+    # Simulación de respuestas para preguntas comunes
+    respuestas_simuladas = {
+        "¿Cuál es el supermercado más barato cerca de mí?": "Según tus gastos anteriores, Aldi y Mercadona son los más económicos.",
+        "¿Cuánto he gastado este mes?": "Este mes has gastado aproximadamente 430€.",
+        "¿Cuánto es 10 euros en dólares?": "10 euros equivalen a aproximadamente 10.80 dólares, dependiendo del cambio actual.",
+        "¿Cómo puedo ahorrar más?": "Puedes establecer un presupuesto mensual y limitar tus gastos en ocio y comida fuera.",
+        "¿Qué categoría de gasto representa más de mis ingresos?": "La categoría que representa mayor gasto es: Alquiler, con un 45% de tus ingresos."
+    }
+
+    # Devuelve una respuesta ficticia o genérica
+    respuesta = respuestas_simuladas.get(question.strip(), f"Recibí tu pregunta: '{question}'. Esta es una respuesta simulada de prueba.")
+    return jsonify({'answer': respuesta}), 200

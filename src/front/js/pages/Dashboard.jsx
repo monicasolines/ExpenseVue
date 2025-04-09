@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import "../../styles/dashboard.css";
-import { BalanceGraph } from "../component/BalanceGraph.jsx"; 
+import { BalanceGraph } from "../component/BalanceGraph.jsx";
 
 
 export const Dashboard = () => {
@@ -15,6 +15,12 @@ export const Dashboard = () => {
 	const formatSourceNumber = (number) => {
 		/* aqui en vez de es-ES para españa he puesto de-DE de alemania que formatea mejor el "currency". */
 		return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', currencyDisplay: 'symbol' }).format(number);
+	};
+
+	const getTotalTransactionsForCategory = (categoryId) => {
+		return store.transactions
+			.filter(tx => tx.category?.id === categoryId)
+			.reduce((acc, tx) => acc + parseFloat(tx.amount), 0);
 	};
 
 	const handleSourceClick = async (source) => {
@@ -45,10 +51,10 @@ export const Dashboard = () => {
 	return (
 		<>
 			<div className="container my-4">
-			<header className="text-center">
-                <h2 className="text-dark">Welcome {store.user?.first_name} {store.user?.last_name}</h2>
-                <p className="text-muted">Here, you can track and manage your financial health with ease.</p>
-            </header>
+				<header className="text-center">
+					<h2 className="text-dark">Welcome {store.user?.first_name} {store.user?.last_name}</h2>
+					<p className="text-muted">Here, you can track and manage your financial health with ease.</p>
+				</header>
 				<BalanceGraph />
 				<div className="container my-4 pt-4">
 
@@ -102,12 +108,13 @@ export const Dashboard = () => {
 									</div>
 
 									<h5 className="pt-3">
-										<span style={{ color: "grey" }}> </span>
-										{currentBalance !== null && !isNaN(currentBalance)
-											? `${formatSourceNumber(currentBalance)}`
-											: `Total: ${formatSourceNumber(
-												store.sources.reduce((sum, source) => sum + source.amount, 0)
-											)}`}
+										{currentSource
+											? `Total: ${formatSourceNumber(
+												store.transactions
+													.filter((tx) => tx.source_id === currentSource.id)
+													.reduce((sum, tx) => sum + parseFloat(tx.amount), 0)
+											)}`
+											: `Total: ${formatSourceNumber(store.totalBalance)}`}
 									</h5>
 									<ul className="list-group list-group-flush">
 										{filteredTransactions.length > 0 ? (
@@ -164,7 +171,9 @@ export const Dashboard = () => {
 														{new Date(highestBudget.target_period).toLocaleDateString("es-ES")}
 													</p>
 													<p>
-														<strong>Total Expense:</strong> {(highestBudget.total_expense || 0).toLocaleString("es-ES")} €
+														<p>
+															<strong>Total Transactions:</strong> {getTotalTransactionsForCategory(highestBudget.category_id).toLocaleString("es-ES")} €
+														</p>
 													</p>
 												</div>
 											);

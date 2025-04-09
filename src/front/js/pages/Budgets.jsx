@@ -20,7 +20,16 @@ export const Budgets = () => {
     useEffect(() => {
         actions.getCategories();
         actions.getBudgets();
+        actions.getTransactions();
     }, []);
+
+    const getTotalTransactionsForCategory = (categoryId) => {
+        return store.transactions
+            .filter(tx => tx.category?.id === categoryId)
+            .reduce((acc, tx) => acc + parseFloat(tx.amount), 0);
+
+        
+    };
 
     const filteredBudgets = uniqueBudgets
         .sort((a, b) => new Date(b.target_period) - new Date(a.target_period))
@@ -261,41 +270,44 @@ export const Budgets = () => {
                     )}
                 </div>
                 <div className="row">
-    {paginatedBudgets.length === 0 ? (
-        <p className="text-center">No budgets available</p>
-    ) : (
-        paginatedBudgets.map((budget) => (
-            <div key={budget.id} className="col-6 col-md-3 mb-4">
-                <div className="card p-3">
-                    <h5>{budget.category_name}</h5>
-                    <p>
-                        <strong>Amount:</strong> €{budget.budget_amount}
-                    </p>
-                    <p>
-                        <strong>Target Period:</strong> {new Date(budget.target_period).toLocaleDateString()}
-                    </p>
-                    <p>
-                        <strong>Total Expense:</strong> €{budget.total_expense || 0}
-                    </p>
-                    <div className="text-end">
-                        <Link
-                            to={`/edit-budget/${budget.id}`}
-                            className="btn btn-warning btn-sm"
-                        >
-                            <i className="fa-solid fa-pencil"></i>
-                        </Link>
-                        <button
-                            className="btn btn-dark btn-sm ms-2"
-                            onClick={() => handleDelete(budget.id)}
-                        >
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
+                    {paginatedBudgets.length === 0 ? (
+                        <p className="text-center">No budgets available</p>
+                    ) : (
+                        paginatedBudgets.map((budget) => (
+                            <div key={budget.id} className="col-6 col-md-3 mb-4">
+                                <div className="card p-3">
+                                    <h5>{budget.category_name}</h5>
+                                    <p>
+                                        <strong>Amount:</strong> €{budget.budget_amount}
+                                    </p>
+                                    <p>
+                                        <strong>Target Period:</strong> {new Date(budget.target_period).toLocaleDateString()}
+                                    </p>
+                                    <p>
+                                        <p>
+                                            <strong>Total Expense:</strong> €{getTotalTransactionsForCategory(budget.category_id).toFixed(2)}
+                                        </p>
+
+                                    </p>
+                                    <div className="text-end">
+                                        <Link
+                                            to={`/edit-budget/${budget.id}`}
+                                            className="btn btn-warning btn-sm"
+                                        >
+                                            <i className="fa-solid fa-pencil"></i>
+                                        </Link>
+                                        <button
+                                            className="btn btn-dark btn-sm ms-2"
+                                            onClick={() => handleDelete(budget.id)}
+                                        >
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
-            </div>
-        ))
-    )}
-</div>
             </div>
             <div className="text-center py-4">
                 <button

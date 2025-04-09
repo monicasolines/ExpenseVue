@@ -27,6 +27,7 @@ import { PasswordRecovery } from "./pages/PasswordRecovery.jsx";
 import { ResetPassword } from "./pages/ResetPassword.jsx";
 import { EditBudget } from "./pages/EditBudget.jsx";
 import { AuthProvider } from "../../contexts/authContext/index.jsx";
+import {AsistenteFinanciero} from "../../front/js/pages/AsistenteFinanciero.jsx";
 
 
 // Layout con Navbar y Footer
@@ -77,6 +78,9 @@ const Layout = () => {
                             <Route path="/edit-category" element={<ProtectedRoute><EditCategory /></ProtectedRoute>} />
                             <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
                             <Route path="/edit-budget/:id" element={<ProtectedRoute><EditBudget /></ProtectedRoute>} />
+                            {/* <Route path="/asistente-financiero" element={<ProtectedRoute><AsistenteFinanciero/></ProtectedRoute>} /> */}
+                            <Route path="/asistente-financiero" element={<AsistenteFinanciero />} />
+
                         </Route>
 
                         {/* Ruta para Not Found */}

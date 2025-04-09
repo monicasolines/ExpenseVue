@@ -856,6 +856,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.setItem('user', JSON.stringify(data.results));
 				setStore({ token: data.access_token, user: data.results, isLogged: true, message: null });
 				return true;
+			},
+			askAIQuestion: async (question) => {
+				const uri = `${getStore().host}/api/ai-query`;
+				const options = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ question })
+				};
+			
+				try {
+					const response = await fetch(uri, options);
+					if (!response.ok) {
+						console.error('Error al obtener respuesta de la IA:', response.statusText);
+						return { error: true, answer: 'Lo siento, hubo un error.' };
+					}
+					const data = await response.json();
+					return { error: false, answer: data.answer };
+				} catch (error) {
+					console.error('Error de red al consultar IA:', error);
+					return { error: true, answer: 'Lo siento, hubo un error de red.' };
+				}
 			}
 		}
 	}

@@ -450,7 +450,7 @@ export const Transactions = () => {
 										<td className="amount">
 											{item.type === 'income' ? `€${item.amount}` : `-€${item.amount}`}
 										</td>
-										<td> {item.source.type_source === 'manual_entry' ? <button type="button" onClick={() => editTransaction(item)} className="btn"> <FontAwesomeIcon icon={faPen} /> </button> : <FontAwesomeIcon icon={faPen} className="d-none" />}</td>
+										<td> {item.source.type_source === 'manual_entry' || 'debit_card' || 'credit_card' || 'bank_account' || 'others' ? <button type="button" onClick={() => editTransaction(item)} className="btn"> <FontAwesomeIcon icon={faPen} /> </button> : <FontAwesomeIcon icon={faPen} className="d-none" />}</td>
 										<td> {item.source.type_source === 'manual_entry' ? <button type="button" className="btn" onClick={() => deleteTransaction(item.id)}> <FontAwesomeIcon icon={faTrashCan} /> </button> : <FontAwesomeIcon icon={faPen} className="d-none" />}</td>
 									</tr>
 								))
