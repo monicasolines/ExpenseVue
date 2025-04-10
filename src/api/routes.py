@@ -838,8 +838,6 @@ def reset_password():
 from flask import Flask, request, jsonify
 from flask import Blueprint
 
-api = Blueprint('api', __name__)
-
 @api.route('/ai-query', methods=['POST'])
 def ai_query():
     data = request.get_json()
