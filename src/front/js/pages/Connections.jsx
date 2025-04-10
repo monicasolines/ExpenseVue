@@ -35,7 +35,12 @@ export const Connections = () => {
 		const consentToken = queryParams.get('consent');
 		const institutionId = queryParams.get('institution');
 		if (consentToken && institutionId) {
-			setConfirmingBank(true);
+			// ✅ llama directamente a la función para guardar el token
+			actions.getConsentToken(consentToken, institutionId).then(() => {
+				navigate('/connections'); // limpia la URL
+				actions.getConnections(); // actualiza la vista
+				actions.getSources();
+			});
 		}
 	}, []);
 

@@ -1,0 +1,8 @@
+.chat-message.user {
+    text-align: right;
+    color: #2D3748;
+  }
+  .chat-message.ai {
+    text-align: left;
+    color: #4A5568;
+  }

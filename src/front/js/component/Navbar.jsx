@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/nav.css";
-import logoExpenseVue from "../../img/ExpenseVue-Logo.png";
+import logoExpenseVue from "../../img/logoEV2.png";
 import { useAuth } from "../../../contexts/authContext/index.jsx";
 import { doSignOut } from "../../../firebase/auth";
 
@@ -34,10 +34,10 @@ export const Navbar = () => {
     };    
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light" aria-label="Offcanvas navbar large" style={{ backgroundColor: '#ffc107' }}>
+        <nav className="navbar navbar-expand-lg navbar-light" aria-label="Offcanvas navbar large" style={{ backgroundColor: '#A0AEC0' }}>
             <div className="container">
                 <Link to="/" className="navbar-brand" onClick={() => closeOffcanvas()}>
-                    <img className="mx-4" height="70" src={logoExpenseVue} alt="ExpenseVue Logo" />
+                    <img className="" height="80" src={logoExpenseVue} alt="ExpenseVue Logo" />
                 </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
                     <span className="navbar-toggler-icon" style={{ color: '#2D3748' }}></span>
