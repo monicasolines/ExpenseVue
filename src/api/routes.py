@@ -439,11 +439,12 @@ def categories():
         response_body['message'] = "List of the categories"
         response_body['results'] = result
         return response_body, 200
+    
     if request.method == 'POST':
         data = request.json
         row = Categories(name = data.get('name'),
                          description = data.get('description'),
-                         user_id = data.get('user_id'))
+                         user_id=current_user['user_id'])
         db.session.add(row)
         db.session.commit()
         response_body['message'] = "Creating a category"
