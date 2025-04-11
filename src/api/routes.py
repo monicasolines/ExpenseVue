@@ -471,7 +471,7 @@ def category(id):
         data = request.json
         row.name = data.get('name')
         row.description = data.get('description')
-        row.user_id = data.get('user_id')
+        row.user_id = current_user['user_id']  
         db.session.commit()
         response_body['message'] = f'Category {id} edited'
         response_body['results'] = row.serialize()

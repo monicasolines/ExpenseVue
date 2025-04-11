@@ -246,27 +246,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 				getActions().getConnections();
 			},
-			createYapilyUser: async (id) => {
+			createYapilyUser: async () => {
 				const uri = `${getStore().host}/api/create-yapily-user`;
 				const options = {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json;charset=UTF-8',
 						'Authorization': `Bearer ${localStorage.getItem('token')}`
-					},
-					body: JSON.stringify({
-						applicationUserId: `ExpenseVue${id}`
-					})
+					}
+					// ❌ no envíes body
 				};
 				const response = await fetch(uri, options);
 				if (!response.ok) {
 					console.log('Error: ', response.status, response.statusText);
 					return false;
-				};
+				}
 				const data = await response.json();
 				console.log(data);
 				return true;
-			},
+			},			
 			deleteYapilyUser: async (yapilyId) => {
 				const uri = `${getStore().host}/api/remove-yapily-user`;
 				const options = {
