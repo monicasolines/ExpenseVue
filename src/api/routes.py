@@ -145,7 +145,6 @@ def connection(id):
 @jwt_required()
 def create_yapily_user():
     response_body = {}
-    # current_user = get_jwt_identity()
     current_user = get_jwt()  # Los datos adicionales
     user = Users.query.filter_by(id=current_user['user_id']).first()
     email_start = user.email.split('@')[0]
@@ -156,16 +155,23 @@ def create_yapily_user():
     headers = {
         "Content-Type": "application/json;charset=UTF-8"
     }
-    print(yapily_uuid, yapily_secret);
+
+    print("Yapily UUID:", yapily_uuid)
+    print("Yapily SECRET:", yapily_secret)
+
     response = requests.post(url, json=payload, headers=headers, auth=(yapily_uuid, yapily_secret))
+
     if response.status_code != 201:
+        print("Yapily error:", response.status_code, response.text)
         response_body['message'] = "Something went wrong"
         response_body['results'] = response.json()
         return response_body, 400
+
     data = response.json()
     user.yapily_username = data.get('applicationUserId')
     user.yapily_id = data.get('uuid')
     db.session.commit()
+
     response_body['message'] = "User created in Yapily"
     response_body['results'] = data
     return response_body, 200
