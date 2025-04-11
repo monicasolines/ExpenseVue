@@ -858,28 +858,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return true;
 			},
 			askAIQuestion: async (question) => {
-				const uri = `${getStore().host}/api/ai-query`;
-				const options = {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ question })
-				};
-			
 				try {
-					const response = await fetch(uri, options);
+					const response = await fetch(process.env.BACKEND_URL + "/ai-query", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({ question })
+					});
+			
 					if (!response.ok) {
-						console.error('Error al obtener respuesta de la IA:', response.statusText);
-						return { error: true, answer: 'Lo siento, hubo un error.' };
+						throw new Error("Error al obtener respuesta de la IA");
 					}
+			
 					const data = await response.json();
-					return { error: false, answer: data.answer };
+					return data;
 				} catch (error) {
-					console.error('Error de red al consultar IA:', error);
-					return { error: true, answer: 'Lo siento, hubo un error de red.' };
+					console.error("Error en askAIQuestion:", error);
+					return { answer: "Lo siento, no pude obtener respuesta en este momento." };
 				}
-			}
+			}			
 		}
 	}
 };
