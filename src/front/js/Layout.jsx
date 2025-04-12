@@ -79,7 +79,6 @@ const Layout = () => {
                             <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
                             <Route path="/edit-budget/:id" element={<ProtectedRoute><EditBudget /></ProtectedRoute>} />
                             {/* <Route path="/asistente-financiero" element={<ProtectedRoute><AsistenteFinanciero/></ProtectedRoute>} /> */}
-                            <Route path="/asistente-financiero" element={<AsistenteFinanciero />} />
 
                         </Route>
 

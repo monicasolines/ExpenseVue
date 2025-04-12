@@ -89,12 +89,12 @@ export const Sidebar = () => {
                             Contact
                         </Link>
                     </li>
-                    <li className="mb-3 ms-2">
+                    {/* <li className="mb-3 ms-2">
                         <Link className="fw-bold sidebar-link" to="/Asistente-financiero">
                             <i className="fa-solid fa-envelope bi pe-none me-2" style={{ width: '16', height: '16' }}></i>
                             Asistente Financiero
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
                 <hr />
                 <div className="dropdown mb-3 ms-2">

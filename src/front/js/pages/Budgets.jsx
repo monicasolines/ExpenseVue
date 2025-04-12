@@ -28,7 +28,7 @@ export const Budgets = () => {
             .filter(tx => tx.category?.id === categoryId)
             .reduce((acc, tx) => acc + parseFloat(tx.amount), 0);
 
-        
+
     };
 
     const filteredBudgets = uniqueBudgets
@@ -122,7 +122,7 @@ export const Budgets = () => {
                             <i className="fa-solid fa-euro-sign fa-2x"></i>
                             <h5>Total Expenses</h5>
                             <p className="text-dark">
-                                €{filteredBudgets.reduce((acc, budget) => acc + (budget.total_expense || 0), 0).toFixed(2)}
+                                €{store.monthlyExpense?.toFixed(2) || "0.00"}
                             </p>
                         </div>
                     </div>
